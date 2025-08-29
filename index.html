@@ -387,6 +387,61 @@
             box-shadow: 0 2px 10px rgba(255, 64, 129, 0.2);
         }
     </style>
+    <style>
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: float 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            opacity: 0;
+            will-change: transform, opacity;
+            /* 优化性能 */
+            pointer-events: none;
+            /* 防止干扰交互 */
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+                transform: translateY(80vh) rotate(90deg) scale(1);
+            }
+
+            50% {
+                transform: translateY(50vh) rotate(180deg) scale(1.2);
+            }
+
+            80% {
+                opacity: 1;
+                transform: translateY(20vh) rotate(270deg) scale(1);
+            }
+
+            100% {
+                transform: translateY(0) rotate(360deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* 添加玫瑰花瓣飘落效果 */
+        .petal {
+            position: absolute;
+            pointer-events: none;
+            animation: fall 6s linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg) translateX(0);
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(720deg) translateX(50px);
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -511,72 +566,93 @@
             backface-visibility: hidden;">
 
     </div>
+    <!-- 添加背景音乐 -->
+    <audio id="bgMusic" loop autoplay>
+        <source src="./2762992032.mp3" type="audio/mpeg">
+        您的浏览器不支持 audio 元素。
+    </audio>
 
+    <!-- 添加音乐控制按钮 -->
+    <button id="musicControl" style="
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        z-index: 1000;
+        transition: all 0.3s ease;
+    ">
+        🔊
+    </button>
 
     <script>
-        // 按钮点击事件
-        document.getElementById('blessBtn').addEventListener('click', function () {
-            alert('小仙女，消消气，祝你七夕快乐，愿你永远开心幸福！💝');
+        // 音乐控制
+        const bgMusic = document.getElementById('bgMusic');
+        const musicControl = document.getElementById('musicControl');
+        let isMusicPlaying = true;
+
+        // 监听音乐控制按钮点击
+        musicControl.addEventListener('click', () => {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                musicControl.textContent = '🎵';
+                musicControl.style.opacity = '0.7';
+            } else {
+                bgMusic.play();
+                musicControl.textContent = '🔊';
+                musicControl.style.opacity = '1';
+            }
+            isMusicPlaying = !isMusicPlaying;
         });
+
+        // 确保页面加载后立即播放音乐
+        window.addEventListener('load', () => {
+            // 尝试自动播放
+            let playPromise = bgMusic.play();
+
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    // 自动播放成功
+                    isMusicPlaying = true;
+                    musicControl.textContent = '🔊';
+                }).catch(error => {
+                    // 自动播放失败
+                    isMusicPlaying = false;
+                    musicControl.textContent = '🎵';
+                    // 添加提示动画
+                    musicControl.style.animation = 'pulse 1s infinite';
+                });
+            }
+        });
+
+        // 用户交互时尝试播放
+        document.addEventListener('click', () => {
+            if (!isMusicPlaying) {
+                bgMusic.play().then(() => {
+                    isMusicPlaying = true;
+                    musicControl.textContent = '🔊';
+                    musicControl.style.animation = 'none';
+                });
+            }
+        }, { once: true });
     </script>
 </body>
 
-<style>
-    .heart {
-        position: absolute;
-        font-size: 20px;
-        animation: float 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        opacity: 0;
-        will-change: transform, opacity;
-        /* 优化性能 */
-        pointer-events: none;
-        /* 防止干扰交互 */
-    }
-
-    @keyframes float {
-        0% {
-            transform: translateY(100vh) rotate(0deg) scale(0.5);
-            opacity: 0;
-        }
-
-        20% {
-            opacity: 1;
-            transform: translateY(80vh) rotate(90deg) scale(1);
-        }
-
-        50% {
-            transform: translateY(50vh) rotate(180deg) scale(1.2);
-        }
-
-        80% {
-            opacity: 1;
-            transform: translateY(20vh) rotate(270deg) scale(1);
-        }
-
-        100% {
-            transform: translateY(0) rotate(360deg) scale(0.5);
-            opacity: 0;
-        }
-    }
-
-    /* 添加玫瑰花瓣飘落效果 */
-    .petal {
-        position: absolute;
-        pointer-events: none;
-        animation: fall 6s linear infinite;
-    }
-
-    @keyframes fall {
-        0% {
-            transform: translateY(-10vh) rotate(0deg) translateX(0);
-        }
-
-        100% {
-            transform: translateY(100vh) rotate(720deg) translateX(50px);
-        }
-    }
-</style>
-
+<script>
+    // 按钮点击事件
+    document.getElementById('blessBtn').addEventListener('click', function () {
+        alert('小仙女，消消气，祝你七夕快乐，愿你永远开心幸福！💝');
+    });
+</script>
 <script>
     // 自动生成爱心和花瓣
     function createHearts() {
