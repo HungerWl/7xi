@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>七夕节小狗祝福</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #fce4ec, #f8bbd0);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #880e4f;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        header {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.15);
+            color: #d81b60;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+        }
+
+        .dogs-container {
+            position: relative;
+            height: 350px;
+            margin: 30px 0;
+            perspective: 1200px;
+        }
+
+        .dog {
+            position: absolute;
+            width: 140px;
+            height: 170px;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .dog.white {
+            left: 30%;
+            transform: translateX(-50%) rotateY(15deg);
+            z-index: 2;
+        }
+
+        .dog.yellow {
+            right: 30%;
+            transform: translateX(50%) rotateY(-15deg);
+            z-index: 1;
+        }
+
+        .dog-body {
+            position: absolute;
+            border-radius: 65% 65% 45% 45%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,1) 100%);
+            box-shadow: -3px 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .dog.white .dog-body {
+            width: 85px;
+            height: 105px;
+            background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%);
+            top: 55px;
+            left: 30px;
+        }
+
+        .dog.yellow .dog-body {
+            width: 85px;
+            height: 105px;
+            background: linear-gradient(135deg, #ffd54f 0%, #ffb300 100%);
+            top: 55px;
+            left: 30px;
+        }
+
+        .dog-head {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 3;
+            transition: transform 0.4s ease;
+            box-shadow: -3px 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .dog.white .dog-head {
+            width: 75px;
+            height: 75px;
+            background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%);
+            top: 25px;
+            left: 35px;
+        }
+
+        .dog.yellow .dog-head {
+            width: 75px;
+            height: 75px;
+            background: linear-gradient(135deg, #ffd54f 0%, #ffb300 100%);
+            top: 25px;
+            left: 35px;
+        }
+
+        /* 优化耳朵样式和动画 */
+        .dog-ear {
+            position: absolute;
+            border-radius: 70% 70% 25% 25%;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -2px 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .dog.white .dog-ear {
+            width: 32px;
+            height: 40px;
+            background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%);
+            top: 10px;
+        }
+
+        .dog.yellow .dog-ear {
+            width: 32px;
+            height: 40px;
+            background: linear-gradient(135deg, #ffd54f 0%, #ffb300 100%);
+            top: 10px;
+        }
+
+        .dog .ear-left {
+            left: 20px;
+            transform: rotate(-30deg);
+            transform-origin: bottom right;
+        }
+
+        .dog .ear-right {
+            right: 20px;
+            transform: rotate(30deg);
+            transform-origin: bottom left;
+        }
+
+        .dog:hover .ear-left {
+            transform: rotate(-45deg) scale(1.05);
+        }
+
+        .dog:hover .ear-right {
+            transform: rotate(45deg) scale(1.05);
+        }
+
+        /* 优化眼睛动画 */
+        .dog-eye {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: #222;
+            border-radius: 50%;
+            top: 48px;
+            animation: blink 4s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 95%, 98% {transform: scaleY(1);}
+            96%, 97% {transform: scaleY(0.1);}
+        }
+
+        .dog.white .eye-left {
+            left: 45px;
+        }
+
+        .dog.white .eye-right {
+            right: 45px;
+        }
+
+        .dog.yellow .eye-left {
+            left: 45px;
+        }
+
+        .dog.yellow .eye-right {
+            right: 45px;
+        }
+
+        /* 优化鼻子动画 */
+        .dog-nose {
+            position: absolute;
+            width: 16px;
+            height: 14px;
+            background: linear-gradient(135deg, #ff8a80 0%, #ff5252 100%);
+            border-radius: 50%;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: sniff 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes sniff {
+            0%, 100% {transform: translateX(-50%) scale(1);}
+            50% {transform: translateX(-50%) scale(1.15);}
+        }
+
+        .dog-leg {
+            position: absolute;
+            width: 20px;
+            height: 50px;
+            border-radius: 15px;
+            bottom: 0;
+            transition: transform 0.4s ease;
+        }
+
+        .dog .leg-front {
+            left: 35px;
+        }
+
+        .dog .leg-back {
+            right: 35px;
+        }
+
+        /* 优化跳舞动画 */
+        @keyframes dance {
+            0%, 100% {
+                transform: translateY(0) rotate(0) translateZ(0);
+            }
+            25% {
+                transform: translateY(-30px) rotate(-12deg) translateZ(30px);
+            }
+            50% {
+                transform: translateY(0) rotate(0) translateZ(0);
+            }
+            75% {
+                transform: translateY(-30px) rotate(12deg) translateZ(30px);
+            }
+        }
+
+        .dog.white {
+            animation: dance 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+
+        .dog.yellow {
+            animation: dance 3s cubic-bezier(0.4, 0, 0.2, 1) infinite 0.75s;
+        }
+
+        /* 响应式优化 */
+        @media (max-width: 600px) {
+            .dogs-container {
+                height: 250px;
+            }
+
+            .dog {
+                transform: scale(0.85);
+            }
+
+            .dog.white {
+                left: 20%;
+            }
+
+            .dog.yellow {
+                right: 20%;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .dog {
+                transform: scale(0.75);
+            }
+
+            .dog.white {
+                left: 18%;
+            }
+
+            .dog.yellow {
+                right: 18%;
+            }
+        }
+    </style>
+</head>
+
+<!-- 保持body部分不变 -->
+<body>
+    <!-- 原有内容保持不变 -->
+    <div class="container">
+        <header>
+            <h1>七夕节快乐</h1>
+            <p class="subtitle">两只小狗送上最真挚的祝福</p>
+        </header>
+
+        <div class="dogs-container">
+            <div class="dog white">
+                <div class="dog-body"></div>
+                <div class="dog-head"></div>
+                <div class="dog-ear ear-left"></div>
+                <div class="dog-ear ear-right"></div>
+                <div class="dog-eye eye-left"></div>
+                <div class="dog-eye eye-right"></div>
+                <div class="dog-nose"></div>
+                <div class="dog-leg leg-front"></div>
+                <div class="dog-leg leg-back"></div>
+                <div class="flower">
+                    <div class="flower-center"></div>
+                    <div class="petal petal-1"></div>
+                    <div class="petal petal-2"></div>
+                    <div class="petal petal-3"></div>
+                    <div class="petal petal-4"></div>
+                    <div class="stem"></div>
+                </div>
+            </div>
+
+            <div class="dog yellow">
+                <div class="dog-body"></div>
+                <div class="dog-head"></div>
+                <div class="dog-ear ear-left"></div>
+                <div class="dog-ear ear-right"></div>
+                <div class="dog-eye eye-left"></div>
+                <div class="dog-eye eye-right"></div>
+                <div class="dog-nose"></div>
+                <div class="dog-leg leg-front"></div>
+                <div class="dog-leg leg-back"></div>
+                <div class="flower">
+                    <div class="flower-center"></div>
+                    <div class="petal petal-1"></div>
+                    <div class="petal petal-2"></div>
+                    <div class="petal petal-3"></div>
+                    <div class="petal petal-4"></div>
+                    <div class="stem"></div>
+                </div>
+            </div>
+
+            <!-- <div class="hearts" id="hearts"></div> -->
+        </div>
+
+        <div class="message">
+            <p>在这个浪漫的七夕节，坨坨和哒哒带着鲜花与祝福，祝小仙女：</p>
+            <p>愿你的生活充满爱与欢笑，像这两只快乐的小狗一样，永远幸福相伴！</p>
+        </div>
+
+        <button class="btn" id="blessBtn" style="
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, #ff80ab, #ff4081);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 64, 129, 0.3);
+            transition: all 0.3s ease;
+            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+            margin: 20px 0;
+            animation: pulse 2s infinite;
+        ">
+            🎀 接收祝福 💝
+        </button>
+        <style>
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
+            }
+            .btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 6px 20px rgba(255, 64, 129, 0.4);
+                background: linear-gradient(135deg, #ff4081, #ff80ab);
+            }
+            .btn:active {
+                transform: translateY(1px);
+                box-shadow: 0 2px 10px rgba(255, 64, 129, 0.2);
+            }
+        </style>
+
+        <footer>
+            <p>2025.8.29 七夕节小狗祝福</p>
+        </footer>
+    </div>
+
+    <script>
+        // 创建漂浮的爱心
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts');
+            const numberOfHearts = 20;
+
+            for (let i = 0; i < numberOfHearts; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤';
+
+                // 随机位置和动画延迟
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+
+                heartsContainer.appendChild(heart);
+            }
+        }
+
+        // 按钮点击事件
+        document.getElementById('blessBtn').addEventListener('click', function () {
+            alert('七夕节快乐!');
+
+            // 添加更多爱心
+            for (let i = 0; i < 10; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = '0s';
+                document.getElementById('hearts').appendChild(heart);
+            }
+        });
+
+        // 页面加载时创建爱心
+        window.addEventListener('load', createHearts);
+    </script>
+</body>
+
+</html>
